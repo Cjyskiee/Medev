@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MedEvidence — Private Medical Research Assistant</title>
+<link rel="icon" href="assets/icon.png" type="image/png">
+<link rel="stylesheet" href="styles.css">
+
+<!-- Firebase v10 compat build -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  window.FIREBASE_CONFIG = {
+    apiKey: "AIzaSyA969hYK5Z0IXXpfldgFjNC_2g1hPFtoaA",
+    authDomain: "medev-f910b.firebaseapp.com",
+    projectId: "medev-f910b",
+    storageBucket: "medev-f910b.firebasestorage.app",
+    messagingSenderId: "924089605964",
+    appId: "1:924089605964:web:e3f48a4509d5026afff9e9"
+  };
+</script>
+<script src="auth.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol>
+    <symbol id="i-files" viewBox="0 0 24 24"><path d="M15 2h-4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M16.706 2.706A2.4 2.4 0 0 0 15 2v5a1 1 0 0 0 1 1h5a2.4 2.4 0 0 0-.706-1.706z"/><path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Open navigation"><svg class="ic"><use href="#i-menu"/></svg></button>
+  <img class="logo-sm" data-asset="logo" alt="" hidden><strong>MedEvidence</strong>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<aside class="sidebar" id="sidebar" aria-label="Primary">
+  <div class="brand">
+    <img class="logo" data-asset="logo" alt="MedEvidence logo" hidden>
+    <div><div class="brand-name">MedEvidence</div><div class="brand-sub">Private Medical Research Assistant</div></div>
+  </div>
+
+  <div class="profile">
+    <div class="avatar" data-asset="profile"><svg class="ic"><use href="#i-user"/></svg></div>
+    <div class="profile-text">
+      <div class="profile-name" id="profileName">Guest</div>
+      <div class="profile-sub" id="profileSub">Not signed in</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button data-view="search" class="active"><svg class="ic"><use href="#i-plus"/></svg>New Search</button>
+    <button data-view="history"><svg class="ic"><use href="#i-history"/></svg>Chat History</button>
+    <button data-view="documents"><svg class="ic"><use href="#i-files"/></svg>Documents</button>
+    <button data-view="settings"><svg class="ic"><use href="#i-settings"/></svg>Settings</button>
+  </nav>
+
+  <div class="nav" style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px">
+    <button id="navAuthBtn" type="button">
+      <svg class="ic"><use href="#i-user"/></svg><span id="navAuthLabel">Sign in</span>
+    </button>
+  </div>
+
+  <div class="conn" aria-live="polite">
+    <div class="conn-row"><span class="dot" id="dotBackend"></span><span id="txtBackend">Backend: checking…</span></div>
+    <div class="conn-row"><span class="dot" id="dotModel"></span><span id="txtModel">Model: checking…</span></div>
+  </div>
+</aside>
+
+<main class="main">
+  <!-- SEARCH -->
+  <section id="view-search" class="view active">
+    <header class="page-head">
+      <h1>Evidence search</h1>
+      <p>Ask a research question. Answers are generated only from records that match your condition, classification and patient group.</p>
+    </header>
+
+    <div class="hero" id="hero" data-asset="hero">
+      <div class="hero-copy">
+        <h2>Similar wording is not the same condition.</h2>
+        <p>Benign and malignant, adult and pediatric, type 1 and type 2 are checked before anything is shown.</p>
+      </div>
+    </div>
+
+    <form class="searchbox" id="searchForm" autocomplete="off">
+      <svg class="ic lead"><use href="#i-search"/></svg>
+      <input id="queryInput" type="text" maxlength="500" placeholder="Ask a medical research question…" aria-label="Medical research question">
+      <button type="button" class="icon-btn" id="clearBtn" aria-label="Clear search" hidden><svg class="ic"><use href="#i-x"/></svg></button>
+      <button type="submit" class="go" id="goBtn" aria-label="Search"><svg class="ic"><use href="#i-arrow-up"/></svg></button>
+    </form>
+    <div class="chips" id="chips"></div>
+
+    <div id="results" aria-live="polite"></div>
+
+    <section class="features">
+      <div><svg class="ic"><use href="#i-search"/></svg><h3>Context-aware retrieval</h3><p>Matches condition, classification, patient group and study type, not just words.</p></div>
+      <div><svg class="ic"><use href="#i-shield"/></svg><h3>Evidence-first generation</h3><p>The model only sees records that passed validation.</p></div>
+      <div><svg class="ic"><use href="#i-file"/></svg><h3>Source citations</h3><p>Every claim points to a real record and its exact metadata.</p></div>
+      <div><svg class="ic"><use href="#i-alert"/></svg><h3>No-context fallback</h3><p>When evidence is missing, you get a clear "no context" result.</p></div>
+    </section>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="view-history" class="view">
+    <header class="page-head row"><div><h1>Chat history</h1><p>Searches run in this app. Open one to see its stored result.</p></div>
+      <button class="btn" id="clearHistoryBtn">Clear history</button></header>
+    <div id="historyList"></div>
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section id="view-documents" class="view">
+    <header class="page-head row"><div><h1>Documents</h1><p>Synthetic records available for search. No real patient data.</p></div>
+      <div><input type="file" id="uploadInput" accept=".txt,.md,.markdown,.json,.jsonl" hidden>
+      <button class="btn" id="uploadBtn"><svg class="ic"><use href="#i-upload"/></svg>Upload .txt / .md / .json</button></div></header>
+    <div id="uploadMsg"></div>
+    <p class="muted small">Text or Markdown: a <code>Title:</code> and <code>Author:</code> line (or a <code># Heading</code>), a blank line, then the body. Documents require a signed-in account.</p>
+    <div id="docList" class="doclist"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="view-settings" class="view">
+    <header class="page-head"><h1>Settings</h1><p>Application information, connection status and privacy notes.</p></header>
+    <div class="panel"><h3>Doctor profile</h3>
+      <div class="form-row"><label for="setName">Display name</label><input id="setName" maxlength="60" placeholder="Dr. [Name]"></div>
+      <div class="form-row"><label for="setSub">Subtitle</label><input id="setSub" maxlength="60" placeholder="Physician · Researcher"></div>
+      <button class="btn" id="saveProfile">Save</button> <span class="muted" id="profileSaved"></span>
+      <p class="muted small">Stored only in this browser when not signed in. Sign in to sync with your account.</p></div>
+    <div class="panel"><h3>Connection status</h3><div id="statusBox" class="kv"></div>
+      <button class="btn" id="testModel">Test model connection</button>
+      <p class="muted small">"Verified" appears only after a real request to the model API succeeds.</p></div>
+    <div class="panel"><h3>Document collection</h3><div id="collectionBox" class="kv"></div></div>
+    <div class="panel"><h3>Privacy notes</h3><ul class="notes">
+      <li>The public demo uses fictional, synthetic records only. Do not enter real patient information.</li>
+      <li>The model API key stays on the backend and is never sent to the browser.</li>
+      <li>Retrieved excerpts for a question are sent to the organizers' model API to generate the summary.</li>
+      <li>Search history is stored locally in <code>backend/data/history.json</code>. Clear it from Chat History.</li>
+      <li>MedEvidence is a research prototype. It is not clinically validated and gives no diagnosis or treatment advice.</li></ul></div>
+  </section>
+</main>
+
+<dialog id="docModal"><div class="modal-head"><h2 id="modalTitle"></h2><button class="icon-btn" id="modalClose" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></div><div id="modalBody"></div></dialog>
+
+<!-- ==================== AUTH MODAL (4 screens) ==================== -->
+<dialog id="authModal" aria-labelledby="authTitle">
+  <div class="auth-wrap">
+    <button class="icon-btn auth-close" id="authClose" aria-label="Close">
+      <svg class="ic"><use href="#i-x"/></svg>
+    </button>
+
+    <!-- Brand -->
+    <div class="auth-brand">
+      <div class="auth-logo">
+        <svg class="ic" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
+      </div>
+      <div>
+        <div class="auth-brand-name">MedEvidence</div>
+        <div class="auth-brand-sub">Private Medical Research Assistant</div>
+      </div>
+    </div>
+
+    <!-- ===== Screen 1: Sign in ===== -->
+    <div class="auth-screen" id="screenSignIn">
+      <header class="auth-header">
+        <h2 id="authTitle">Sign in</h2>
+        <p>Access your saved history and submit new research.</p>
+      </header>
+
+      <form id="signInForm" class="auth-form" autocomplete="on">
+        <div class="auth-field">
+          <label for="signInEmail">Email</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-user"/></svg>
+            <input id="signInEmail" type="email" autocomplete="username" placeholder="you@hospital.org" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signInPassword">Password</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-lock"/></svg>
+            <input id="signInPassword" type="password" autocomplete="current-password" placeholder="Your password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit" id="signInBtn">
+          <span>Sign in</span>
+          <svg class="ic"><use href="#i-arrow-up"/></svg>
+        </button>
+        <p class="auth-msg" id="signInMsg"></p>
+      </form>
+
+      <div class="auth-switch">
+        <span>New to MedEvidence?</span>
+        <button type="button" id="toSignUp">Create an account</button>
+      </div>
+      <div class="auth-switch">
+        <button type="button" id="forgotPassword">Forgot password?</button>
+      </div>
+    </div>
+
+    <!-- ===== Screen 2: Create account ===== -->
+    <div class="auth-screen" id="screenSignUp" hidden>
+      <header class="auth-header">
+        <h2>Create account</h2>
+        <p>We'll send a verification code to your email.</p>
+      </header>
+
+      <form id="signUpForm" class="auth-form" autocomplete="on">
+        <div class="auth-field">
+          <label for="signUpEmail">Email</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-mail"/></svg>
+            <input id="signUpEmail" type="email" autocomplete="email" placeholder="you@hospital.org" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signUpPassword">Password</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-lock"/></svg>
+            <input id="signUpPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters" minlength="6" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signUpConfirm">Confirm password</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-lock"/></svg>
+            <input id="signUpConfirm" type="password" autocomplete="new-password" placeholder="Re-enter password" minlength="6" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signUpName">Display name</label>
+          <div class="auth-input">
+            <svg class="ic"><use href="#i-user"/></svg>
+            <input id="signUpName" type="text" autocomplete="name" placeholder="Dr. Reyes" maxlength="60">
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit" id="signUpBtn">
+          <span>Create account</span>
+          <svg class="ic"><use href="#i-arrow-up"/></svg>
+        </button>
+        <p class="auth-msg" id="signUpMsg"></p>
+      </form>
+
+      <div class="auth-switch">
+        <span>Already have an account?</span>
+        <button type="button" id="toSignIn">Sign in</button>
+      </div>
+    </div>
+
+    <!-- ===== Screen 3: Verification code ===== -->
+<div class="auth-screen" id="screenVerify" hidden>
+  <header class="auth-header">
+    <div class="auth-verify-icon">
+      <svg class="ic"><use href="#i-mail"/></svg>
+    </div>
+    <h2>Check your email</h2>
+    <p>We sent a verification link to<br><strong id="verifyEmail"></strong></p>
+  </header>
+
+  <div class="auth-verify-steps">
+    <div class="auth-step"><span>1</span> Open the email from Firebase</div>
+    <div class="auth-step"><span>2</span> Click the verification link</div>
+    <div class="auth-step"><span>3</span> Come back and press the button below</div>
+  </div>
+
+  <form id="verifyForm" class="auth-form">
+    <button type="submit" class="auth-submit" id="verifyBtn">
+      <span>I've clicked the link — continue</span>
+      <svg class="ic"><use href="#i-arrow-up"/></svg>
+    </button>
+    <p class="auth-msg" id="verifyMsg"></p>
+  </form>
+
+  <div class="auth-switch">
+    <span>Didn't receive it?</span>
+    <button type="button" id="resendCode">Resend email</button>
+  </div>
+
+  <div class="auth-switch">
+    <button type="button" id="backFromVerify">← Back to sign in</button>
+  </div>
+</div>
+
+    <!-- ===== Screen 4: Success ===== -->
+    <div class="auth-screen" id="screenSuccess" hidden>
+      <header class="auth-header">
+        <div class="auth-verify-icon auth-success-icon">
+          <svg class="ic"><use href="#i-shield"/></svg>
+        </div>
+        <h2>You're in</h2>
+        <p>Email verified. Redirecting to MedEvidence…</p>
+      </header>
+    </div>
+
+    <p class="auth-footnote">
+      By continuing you agree this is a research prototype — not a diagnostic or treatment tool.
+    </p>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
