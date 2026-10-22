@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+psycopg[binary]
+sentence-transformers
+httpx
+python-dotenv
+pydantic
+firebase-admin
